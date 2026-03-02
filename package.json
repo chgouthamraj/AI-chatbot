@@ -1,0 +1,21 @@
+{
+  "name": "aurora-rag-chatbot",
+  "version": "1.0.0",
+  "description": "An Aurora-focused RAG chatbot using LangChain and Supabase.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "embed": "node back-end.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@langchain/community": "^1.1.20",
+    "@langchain/core": "^1.1.29",
+    "@langchain/openai": "^1.2.11",
+    "@langchain/textsplitters": "^1.0.1",
+    "@supabase/supabase-js": "^2.98.0",
+    "express": "^4.22.1"
+  }
+}
