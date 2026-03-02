@@ -1,9 +1,11 @@
+// Cache DOM nodes for faster access.
 const form = document.getElementById("form");
 const userInput = document.getElementById("user-input");
 const chatbotConversation = document.getElementById(
   "chatbot-conversation-container"
 );
 
+// Render a chat bubble and keep the latest message in view.
 function addSpeechBubble(text, who) {
   const bubble = document.createElement("div");
   bubble.classList.add("speech", who === "human" ? "speech-human" : "speech-ai");
@@ -12,6 +14,7 @@ function addSpeechBubble(text, who) {
   chatbotConversation.scrollTop = chatbotConversation.scrollHeight;
 }
 
+// Send the user's question to the backend.
 async function askQuestion(question) {
   const response = await fetch("/api/chat", {
     method: "POST",
@@ -27,6 +30,7 @@ async function askQuestion(question) {
   return data.answer;
 }
 
+// Handle the form submit without a page refresh.
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const question = userInput.value.trim();

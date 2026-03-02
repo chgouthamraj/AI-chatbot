@@ -4,19 +4,23 @@ import { StringOutputParser } from "@langchain/core/output_parsers";
 import { RunnableSequence, RunnablePassthrough } from "@langchain/core/runnables";
 import dotenv from "dotenv";
 
+// Load environment variables from .env for local dev.
 dotenv.config();
 
+// Shared model for each step in the sequence.
 const llm = new ChatOpenAI({
     temperature: 0,
     openAIApiKey: process.env.OPENAI_API_KEY,
 });
 
+// Step 1: add missing punctuation.
 const punctuationTemplate = `Given a sentence, add punctuation where needed.
   sentence: {sentence}
   sentence with punctuation:`;
 
 const punctuationPrompt = PromptTemplate.fromTemplate(punctuationTemplate);
 
+// Step 2: fix grammar.
 const grammarTemplate = `Given a sentence correct the grammar.
   sentence: {punctuated_sentence}
   sentence with correct grammar:`;
@@ -33,6 +37,7 @@ const grammarPrompt = PromptTemplate.fromTemplate(grammarTemplate);
 //   new StringOutputParser(),
 // ]);
 
+// Step 3: translate into the requested language.
 const translationTemplate = `Given a sentence, translate that sentence into {language}
   sentence: {grammatically_correct_sentence}
   translated sentence:`;
@@ -56,6 +61,7 @@ const translationChain = RunnableSequence.from([
 ]);
 
 
+// Build a pipeline that punctuates -> fixes grammar -> translates.
 const chain = RunnableSequence.from([{
     punctuated_sentence: punctuationChain,
     original_sentence: new RunnablePassthrough()
@@ -68,6 +74,7 @@ const chain = RunnableSequence.from([{
 ])
 
 
+// Sample invocation.
 const response = await chain.invoke({
     sentence: "i dont liked mondays",
     language: "hindi",
